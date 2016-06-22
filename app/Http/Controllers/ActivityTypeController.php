@@ -123,7 +123,7 @@ class ActivityTypeController extends Controller {
 	{
 		//
     	        $activityTypeUpdate=Request::only('acttype_name','acttype_description','acttype_icon','acttype_status');
-		$language = CepActivityTypes::where('acttype_id', $id)->first();
+				$language = CepActivityTypes::where('acttype_id', $id)->first();
                 $validate = Validator::make($activityTypeUpdate,[
                             'acttype_name' => 'required|unique:cep_activity_types,acttype_id,'.$id.',acttype_id',
                             'acttype_description' => 'required',

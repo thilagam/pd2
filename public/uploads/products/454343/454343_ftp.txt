@@ -1,0 +1,4 @@
+/var/www/html/pd2/public/uploads/products/454343/ftp:[]
+/var/www/html/pd2/public/uploads/products/454343/ftp/folder1:[]
+/var/www/html/pd2/public/uploads/products/454343/ftp/folder1/folder1_1:['usr_56717f6b7ab75.png', 'usr_56822026857b1.jpg', 'usr_567252d0202d6.jpg', 'attach-1.png']
+/var/www/html/pd2/public/uploads/products/454343/ftp/folder1/folder_1_2:['usr_56717f6b7ab75.png', 'usr_56822026857b1.jpg', 'usr_567252d0202d6.jpg', 'attach-1.png']

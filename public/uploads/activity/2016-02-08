@@ -1,0 +1,15 @@
+{"act_template_id":{"actmp_id":"171","actmp_name":"act_delivery_upload","actmp_description":"act_delivery_upload_info"},"act_by":"1515082812194320","act_product_id":"454324","act_variables":"{ \"AC_PRODUCT\": \"Shoe\"}","act_datetime":{"date":"2016-02-08 11:13:26","timezone_type":3,"timezone":"UTC"}}{
+    "act_template_id": {
+        "actmp_id": "171",
+        "actmp_name": "act_delivery_upload",
+        "actmp_description": "act_delivery_upload_info"
+    },
+    "act_by": "1515082812194320",
+    "act_product_id": "454324",
+    "act_variables": "{ \"AC_PRODUCT\": \"Shoe\"}",
+    "act_datetime": {
+        "date": "2016-02-08 11:16:53",
+        "timezone_type": 3,
+        "timezone": "UTC"
+    }
+}

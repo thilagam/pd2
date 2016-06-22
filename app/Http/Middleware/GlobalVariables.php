@@ -140,10 +140,10 @@ class GlobalVariables {
 
 		$global_data['tn_languages'] = CepLanguages::where('lang_status',1)->get();
 		$global_data['tn_crud'] = DB::table('cep_crud')
-															->where('crud_status',1)
-															->select('crud_name','crud_url')
-															->orderBy('crud_name')
-															->get();
+								->where('crud_status',1)
+								->select('crud_name','crud_url')
+								->orderBy('crud_name')
+								->get();
 		//print_r ($global_data['tn_crud']);
 
 
@@ -315,7 +315,8 @@ class GlobalVariables {
 	*
 	* @return Associate Array to show values in left sidebar
 	*/
-	public function productsPerUser(){
+	public function productsPerUser()
+	{
 		$user = User::with('groups')->find(Auth::id());
 		//echo "<pre>"; print_r($user);exit;
 		if((strcmp($user->groups->group_code,"SA") == 0 || strcmp($user->groups->group_code,'DEV') == 0)){
@@ -346,9 +347,9 @@ class GlobalVariables {
 	                                      ->groupBy('puser_product_id');
 	                          })
 	    		       ->where('prod_status',1)
-	                          ->groupBy('item_id','puser_product_id')
-														->orderBy('up_company_name','ASC')
-	                          ->get();
+                       ->groupBy('item_id','puser_product_id')
+						->orderBy('up_company_name','ASC')
+                       ->get();
 
 		}
        // echo "<pre>"; print_r($product);exit;
