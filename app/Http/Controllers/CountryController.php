@@ -16,6 +16,8 @@ class CountryController extends Controller {
 	public $countries;
 	public $language_array;
 	public $create_rules;
+	public $create_msgs;
+	public $validate;
 	/*
         |--------------------------------------------------------------------------
         | Country
@@ -47,7 +49,6 @@ class CountryController extends Controller {
 	public function index()
 	{
 		//
-		echo "<pre>";print_r($this->dictionary);exit;
 		if(!$this->permit->crud_countries)
             return redirect('accessDenied');
 		//$countries = CepCountry::with('language')->get();
@@ -98,7 +99,12 @@ class CountryController extends Controller {
 		CepCountry::create($countries);*/
 		$this->countries = Request::all();
 		$this->create_rules = array('country_name' => 'required|unique:cep_countries|max:45','country_code'=>'required|unique:cep_countries|max:3');
-		$this->create_msgs = array();
+		$this->create_msgs = array('country_name.required'=>$this->dictionary->country_name_required,'country_name.unique'=>$this->dictionary->country_name_unique,'country_name.max'=>$this->dictionary->country_name_max,'country_code.required'=>$this->dictionary->country_code_required,'country_code.unique'=>$this->dictionary->country_code_unique,'country_code.max'=>$this->dictionary->country_code_max);
+		$this->validate = Validator::make($this->countries,$this->create_rules,$this->create_msgs);
+		if($this->validate->fails()){
+			return redirect()->back()->withErrors($this->validate->errors());
+		}
+		CepCountry::create($this->countries);
 		return redirect('countries');
 	}
 
