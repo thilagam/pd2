@@ -58,12 +58,14 @@ class CountryController extends Controller {
 		//
 		if(!$this->permit->crud_countries_create)
             return redirect('accessDenied');
-		$languages=CepLanguages::all();
+		/*$languages=CepLanguages::all();
 		$languages_array=array();
 		$languages_array[""]='Select';
 		foreach($languages as $language){
 			$languages_array[$language->lang_code]=$language->lang_name;
-		}
+		}*/
+		$languages_array = CepLanguages::lists('lang_name','lang_code');
+
 		return view('countries.create', compact('languages_array'));
 	}
 
