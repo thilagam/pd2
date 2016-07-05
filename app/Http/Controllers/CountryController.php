@@ -12,6 +12,7 @@ class CountryController extends Controller {
 
 	public $configs;
 	public $permit;
+	public $countries;
 	/*
         |--------------------------------------------------------------------------
         | Country
@@ -44,8 +45,10 @@ class CountryController extends Controller {
 		//
 		if(!$this->permit->crud_countries)
             return redirect('accessDenied');
-		$countries = CepCountry::with('language')->get();
-		return view('countries.index',compact('countries'));
+		//$countries = CepCountry::with('language')->get();
+		//return view('countries.index',compact('countries'));
+		$this->countries = CepCountry::with('language')->get();
+		return view('countries.index')->with(array('countries'=>$this->countries));
 	}
 
 	/**
