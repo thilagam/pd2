@@ -190,7 +190,7 @@ class CountryController extends Controller {
 		$this->country_update = Request::all();
 		$this->update_rules = array('country_name' =>'required|unique:cep_countries,country_name,'.$id.',country_id|max:45','country_code' => 'required|unique:cep_countries,country_code,'.$id.',country_id|max:3');
 		$this->update_msgs = array('country_name.required'=>$this->dictionary->country_name_required,'country_name.unique'=>$this->dictionary->country_name_unique,'country_name.max'=>$this->dictionary->country_name_max,'country_code.required'=>$this->dictionary->country_code_required,'country_code.unique'=>$this->dictionary->country_code_unique,'country_code.max'=>$this->dictionary->country_code_max);
-		$this->validate = Validator::make($countryUpdate,$this->update_rules,$this->update_msgs);
+		$this->validate = Validator::make($this->country_update,$this->update_rules,$this->update_msgs);
 		if($this->validate->fails()){
 			return redirect()->back()->withErrors($this->validate->errors());
 		}
