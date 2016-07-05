@@ -18,6 +18,7 @@ class CountryController extends Controller {
 	public $create_rules;
 	public $create_msgs;
 	public $validate;
+	public $country;
 	/*
         |--------------------------------------------------------------------------
         | Country
@@ -120,7 +121,7 @@ class CountryController extends Controller {
 		if(!$this->permit->crud_countries_read)
             return redirect('accessDenied');
 
-		$country=CepCountry::where('country_id', $id)->first();
+		/*$country=CepCountry::where('country_id', $id)->first();
 
 		$languages=CepLanguages::all();
 		$languages_array=array();
@@ -128,7 +129,10 @@ class CountryController extends Controller {
 			$languages_array[$language->lang_code]=$language->lang_name;
 		}
 
-		return count($country) ? view("countries.show", compact('country','languages_array')) : abort(404);
+		return count($country) ? view("countries.show", compact('country','languages_array')) : abort(404);*/
+		$this->country = CepCountry::join('cep_languages','cep_countries.country_language_code','=','cep_languages.lang_code')->select('cep_countries.*','cep_languages.lang_name')->where('country_id',$id)->first();
+		return count($this->country) ? view('countries.show')->with(array('country'=>$this->country)) : abort(404);
+
 	}
 
 	/**

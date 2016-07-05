@@ -30,7 +30,7 @@
     </div>
     <div class="form-group">
         {!! Form::label('Language Code', 'Language Code:') !!}
-        {!! Form::select('country_language_code', $languages_array, 'country_language_code',['class'=>'form-control']) !!}
+        {!! Form::select('country_language_code', array(''=>'Select')+$languages_array, 'country_language_code',['class'=>'form-control']) !!}
     </div>
     <div class="form-group">
         <a href="{{ url('countries')}}" class="btn btn-purple">Back</a>
