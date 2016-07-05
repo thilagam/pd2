@@ -147,14 +147,18 @@ class CountryController extends Controller {
 		if(!$this->permit->crud_countries_edit)
             return redirect('accessDenied');
 
-		$country=CepCountry::where('country_id', $id)->first();
+		/*$country=CepCountry::where('country_id', $id)->first();
 		$languages=CepLanguages::all();
 		$languages_array=array();
 		foreach($languages as $language){
 			$languages_array[$language->lang_code]=$language->lang_name;
 		}
 
-		return count($country) ? view("countries.edit", compact('country','languages_array')) : abort(404);
+		return count($country) ? view("countries.edit", compact('country','languages_array')) : abort(404);*/
+		$this->country = CepCountry::where('country_id',$id)->first();
+		$this->language_array = CepLanguages::lists('lang_name','lang_code');
+		return count($this->country) ? view('countries.edit')->with(array('country'=>$this->country),'languages_array'=>$this->language_array)) : abort(404);
+
 	}
 
 	/**
