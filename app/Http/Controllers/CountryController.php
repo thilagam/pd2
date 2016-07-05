@@ -12,7 +12,10 @@ class CountryController extends Controller {
 
 	public $configs;
 	public $permit;
+	public $dictionary;
 	public $countries;
+	public $language_array;
+	public $create_rules;
 	/*
         |--------------------------------------------------------------------------
         | Country
@@ -32,6 +35,7 @@ class CountryController extends Controller {
 		$this->middleware('auth');
 		$this->permit=$request->attributes->get('permit');
     	$this->configs=$request->attributes->get('configs');
+    	$this->dictionary = $request->attributes->get('dictionary');
 	}
 
 
@@ -43,6 +47,7 @@ class CountryController extends Controller {
 	public function index()
 	{
 		//
+		echo "<pre>";print_r($this->dictionary);exit;
 		if(!$this->permit->crud_countries)
             return redirect('accessDenied');
 		//$countries = CepCountry::with('language')->get();
@@ -66,10 +71,12 @@ class CountryController extends Controller {
 		$languages_array[""]='Select';
 		foreach($languages as $language){
 			$languages_array[$language->lang_code]=$language->lang_name;
-		}*/
-		$languages_array = CepLanguages::lists('lang_name','lang_code');
-
+		}
 		return view('countries.create', compact('languages_array'));
+		*/
+		$this->language_array = CepLanguages::lists('lang_name','lang_code');
+		return view('countries.create')->with(array('languages_array'=>$this->language_array));
+		
 	}
 
 	/**
@@ -80,7 +87,7 @@ class CountryController extends Controller {
 	public function store()
 	{
 		//
-		$countries=Request::all();
+		/*$countries=Request::all();
 		$validate = Validator::make($countries,[
                             'country_name' => 'required|unique:cep_countries|max:45',
                             'country_code' => 'required|unique:cep_countries|max:3',
@@ -88,7 +95,10 @@ class CountryController extends Controller {
                 if($validate->fails()){
                         return redirect()->back()->withErrors($validate->errors());
                 }
-		CepCountry::create($countries);
+		CepCountry::create($countries);*/
+		$this->countries = Request::all();
+		$this->create_rules = array('country_name' => 'required|unique:cep_countries|max:45','country_code'=>'required|unique:cep_countries|max:3');
+		$this->create_msgs = array();
 		return redirect('countries');
 	}
 
