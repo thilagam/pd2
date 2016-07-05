@@ -194,7 +194,7 @@ class CountryController extends Controller {
 		$this->update_msgs = array('country_name.required'=>$this->dictionary->country_name_required,'country_name.unique'=>$this->dictionary->country_name_unique,'country_name.max'=>$this->dictionary->country_name_max,'country_code.required'=>$this->dictionary->country_code_required,'country_code.unique'=>$this->dictionary->country_code_unique,'country_code.max'=>$this->dictionary->country_code_max);
 		$this->validate = Validator::make($this->country_update,$this->update_rules,$this->update_msgs);
 		if($this->validate->fails()){
-			return redirect()->back()->withErrors($this->validate->errors());
+			return redirect()->back()->withInput()->withErrors($this->validate->errors());
 		}
 		CepCountry::where('country_id','=',$id)->update($this->country_update);
 		return redirect('countries');
