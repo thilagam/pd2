@@ -157,7 +157,7 @@ class CountryController extends Controller {
 		return count($country) ? view("countries.edit", compact('country','languages_array')) : abort(404);*/
 		$this->country = CepCountry::where('country_id',$id)->first();
 		$this->language_array = CepLanguages::lists('lang_name','lang_code');
-		return count($this->country) ? view('countries.edit')->with(array('country'=>$this->country),'languages_array'=>$this->language_array)) : abort(404);
+		return count($this->country) ? view('countries.edit')->with(array('country'=>$this->country,'languages_array'=>$this->language_array)) : abort(404);
 
 	}
 
