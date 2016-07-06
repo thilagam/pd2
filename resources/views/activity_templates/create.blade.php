@@ -38,7 +38,7 @@
     <div class="form-group">
         {!! Form::submit('Save', ['class' => 'btn btn-info btn-single']) !!}
 	    {!! Form::reset('Reset', ['class' => 'btn btn-orange btn-single']) !!}
-        <a href="{{ url('activity-types')}}" class="btn btn-purple pull-right">Back</a> 
+        <a href="{{ url('activity-templates')}}" class="btn btn-purple pull-right">Back</a> 
     </div>
     {!! Form::close() !!}
 
