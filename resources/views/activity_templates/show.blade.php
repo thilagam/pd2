@@ -65,7 +65,7 @@
         </div>
 
         <div class="form-group">
-                <a href="{{ url('activity-types')}}" class="btn btn-purple pull-right">Back</a>
+                <a href="{{ url('activity-templates')}}" class="btn btn-purple pull-right">Back</a>
 
         </div>
     </form>
