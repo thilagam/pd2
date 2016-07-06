@@ -24,6 +24,7 @@ class ActivityTemplateController extends Controller {
 	public $activity_temp_type;
 	public $activity_temp_language;
 	public $acttemplates;
+	public $act_templates_edit;
 	/*
 	|--------------------------------------------------------------------------
 	| Config
@@ -192,7 +193,7 @@ class ActivityTemplateController extends Controller {
 				if(!$this->permit->crud_activity_templates_edit)
             		return redirect('accessDenied');
 
-                $act_templates_array = CepActivityTemplates::where('actmp_status',1)->get();
+                /*$act_templates_array = CepActivityTemplates::where('actmp_status',1)->get();
                 $act_templates = array();
                 $act_templates[0] = "Select";
                 foreach($act_templates_array as $act)
@@ -208,16 +209,19 @@ class ActivityTemplateController extends Controller {
                 $languages = array();
                 $languages[0] = "Select";
                 foreach($languages_array as $lang)
-                        $languages[$lang->lang_code] = $lang->lang_name;
-
-                $act_templates_i = CepActivityTemplates::leftjoin('cep_activity_templates_plus','actmp_id','=','actmpplus_template_id')
+                        $languages[$lang->lang_code] = $lang->lang_name;*/
+                $this->activity_temp_templates = CepActivityTemplates::where('actmp_status',1)->lists('actmp_name','actmp_id');
+        		$this->activity_temp_type = CepActivityTypes::where('acttype_status',1)->lists('acttype_name','acttype_id');
+        		$this->activity_temp_language = CepLanguages::where('lang_status',1)->lists('lang_name','lang_code');
+        
+                $this->act_templates_edit = CepActivityTemplates::leftjoin('cep_activity_templates_plus','actmp_id','=','actmpplus_template_id')
                                                       ->leftjoin('cep_activity_types','acttype_id','=','actmpplus_type')
                                                       ->leftjoin('cep_languages','actmpplus_language_code','=','lang_code')
                                                       ->where('actmpplus_id',$id)
                                                       ->first();
 
-      return count($act_templates_i) ? view('activity_templates.edit',compact('act_templates','act_templates_type','languages','act_templates_i')) : abort(404);
-
+      //return count($act_templates_i) ? view('activity_templates.edit',compact('act_templates','act_templates_type','languages','act_templates_i')) : abort(404);
+       return count($this->act_templates_edit) ? view('activity_templates.edit')->with(array('act_templates'=>$this->activity_temp_templates,'act_templates_type'=>$this->activity_temp_type,'languages'=>$this->activity_temp_language,'act_templates_i'=>$this->act_templates_edit)) : abort(404);
 
 	}
 
