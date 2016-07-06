@@ -98,7 +98,7 @@ class ActivityTemplateController extends Controller {
         return view('activity_templates.create',compact('act_templates','act_templates_type','languages'));*/
 
         $this->activity_temp_templates = CepActivityTemplates::where('actmp_status',1)->lists('actmp_name','actmp_id');
-        $this->activity_temp_type = CepActivityTypes::where('acctype_status',1)->lists('acctype_name','acctype_id');
+        $this->activity_temp_type = CepActivityTypes::where('acttype_status',1)->lists('acttype_name','acttype_id');
         $this->activity_temp_language = CepLanguages::where('lang_status',1)->lists('lang_name','lang_code');
         return view('activity_templates.create')->with(array('act_templates'=>$this->activity_temp_templates,'act_templates_type'=>$this->activity_temp_type,'languages'=>$this->activity_temp_language));
 		
