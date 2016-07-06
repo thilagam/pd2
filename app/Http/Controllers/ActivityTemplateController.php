@@ -20,6 +20,9 @@ class ActivityTemplateController extends Controller {
 	public $permit;
 	public $activity_temp_dictionary;
 	public $act_templates_index;
+	public $activity_temp_templates;
+	public $activity_temp_type;
+	public $activity_temp_language;
 	/*
 	|--------------------------------------------------------------------------
 	| Config
@@ -75,7 +78,7 @@ class ActivityTemplateController extends Controller {
 		if(!$this->permit->crud_activity_templates_create)
             return redirect('accessDenied');
 
-		$act_templates_array = CepActivityTemplates::where('actmp_status',1)->get();
+		/*$act_templates_array = CepActivityTemplates::where('actmp_status',1)->get();
 		$act_templates = array();
 		$act_templates[0] = "Select";
 		foreach($act_templates_array as $act)
@@ -92,8 +95,13 @@ class ActivityTemplateController extends Controller {
                 $languages[0] = "Select";
                 foreach($languages_array as $lang)
                         $languages[$lang->lang_code] = $lang->lang_name;
+        return view('activity_templates.create',compact('act_templates','act_templates_type','languages'));*/
 
-		return view('activity_templates.create',compact('act_templates','act_templates_type','languages'));
+        $this->activity_temp_templates = CepActivityTemplates::where('actmp_status',1)->lists('actmp_name','actmp_id');
+        $this->activity_temp_type = CepActivityTypes::where('acctype_status',1)->lists('acctype_name','acctype_id');
+        $this->activity_temp_language = CepLanguages::where('lang_status',1)->lists('lang_name','lang_code');
+        return view('activity_templates.create')->with(array('act_templates'=>$this->activity_temp_templates,'act_templates_type'=>$this->activity_temp_type,'languages'=>$this->activity_temp_language));
+		
 	}
 
 	/**
