@@ -23,6 +23,7 @@ class ActivityTemplateController extends Controller {
 	public $activity_temp_templates;
 	public $activity_temp_type;
 	public $activity_temp_language;
+	public $acttemplates;
 	/*
 	|--------------------------------------------------------------------------
 	| Config
@@ -164,19 +165,19 @@ class ActivityTemplateController extends Controller {
 				if(!$this->permit->crud_activity_templates_read)
             		return redirect('accessDenied');
 
-                $act_templates_all = CepActivityTemplates::all();
-                $act_templates = CepActivityTemplates::leftjoin('cep_activity_templates_plus','actmp_id','=','actmpplus_template_id')
+                //$act_templates_all = CepActivityTemplates::all();
+                $this->acttemplates = CepActivityTemplates::leftjoin('cep_activity_templates_plus','actmp_id','=','actmpplus_template_id')
                                                       ->leftjoin('cep_activity_types','acttype_id','=','actmpplus_type')
                                                       ->leftjoin('cep_languages','actmpplus_language_code','=','lang_code')
                                                       ->select('cep_activity_templates.actmp_name','cep_activity_templates_plus.*','cep_activity_types.acttype_name','cep_languages.lang_name')
 						      ->where('actmpplus_id',$id)
                                                       ->first();
-                $languages = CepLanguages::where('lang_status',1)->get();
-                $act_templates_type = CepActivityTypes::all();
+                //$languages = CepLanguages::where('lang_status',1)->get();
+                //$act_templates_type = CepActivityTypes::all();
 
 
-       return count($act_templates) ? view('activity_templates.show',compact('act_templates','languages','act_templates_type','act_templates_all')) : abort(404);
-
+       //return count($act_templates) ? view('activity_templates.show',compact('act_templates','languages','act_templates_type','act_templates_all')) : abort(404);
+        return count($this->acttemplates) ? view('activity_templates.show')->with(array('act_templates'=>$this->acttemplates)) : abort(404);                                              
 	}
 
 	/**
