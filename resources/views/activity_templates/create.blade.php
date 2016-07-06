@@ -10,7 +10,7 @@
      {!! Form::open(['url' => 'activity-templates']) !!}
         <div class="form-group">
         {!! Form::label('Template', 'Template') !!}
-        {!! Form::select('actmp_id',$act_templates,null,['class'=>'form-control template-class']) !!}
+        {!! Form::select('actmp_id',array(''=>'Select')+$act_templates,null,['class'=>'form-control template-class']) !!}
         <p class="help-block">Keep Above field Blank to Add New Template </p>
     </div>
     <div id="template_details">
@@ -25,11 +25,11 @@
     </div>
     <div class="form-group">
         {!! Form::label('Language', 'Language') !!}
-        {!! Form::select('actmpplus_language_code',$languages,null,['class'=>'form-control']) !!}
+        {!! Form::select('actmpplus_language_code',array(''=>'Select')+$languages,null,['class'=>'form-control']) !!}
     </div>
     <div class="form-group">
         {!! Form::label('Type', 'Type') !!}
-        {!! Form::select('actmpplus_type',$act_templates_type,null,['class'=>'form-control']) !!}
+        {!! Form::select('actmpplus_type',array(''=>'Select')+$act_templates_type,null,['class'=>'form-control']) !!}
     </div>
     <div class="form-group">
         {!! Form::label('Text', 'Text') !!}
