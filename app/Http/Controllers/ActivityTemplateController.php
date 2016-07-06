@@ -168,6 +168,7 @@ class ActivityTemplateController extends Controller {
                 $act_templates = CepActivityTemplates::leftjoin('cep_activity_templates_plus','actmp_id','=','actmpplus_template_id')
                                                       ->leftjoin('cep_activity_types','acttype_id','=','actmpplus_type')
                                                       ->leftjoin('cep_languages','actmpplus_language_code','=','lang_code')
+                                                      ->select('cep_activity_templates.actmp_name','cep_activity_templates_plus.*','cep_activity_types.acttype_name','cep_languages.lang_name')
 						      ->where('actmpplus_id',$id)
                                                       ->first();
                 $languages = CepLanguages::where('lang_status',1)->get();
