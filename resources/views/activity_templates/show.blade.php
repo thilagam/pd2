@@ -45,12 +45,12 @@
             <label for="Symbol">Type</label>
                 <input type="text" class="form-control" placeholder="{{$act_templates->acttype_name}}" readonly>
         </div>
-        
+
         <div class="form-group">
             <label for="Language Code">Text</label>
                 <textarea class="form-control" readonly>{{ $act_templates->actmpplus_template }}</textarea>
         </div>
-        <div class="form-group">
+        {{-- <div class="form-group">
             <label for="Status" >Status</label>
 
 				<select id="lang_status" class="form-control" readonly>
@@ -58,6 +58,10 @@
 				    <option value="0" @if ($act_templates->actmpplus_status == 0) selected @endif >In Active</option>
 				</select>
 
+        </div> --}}
+        <div class="form-group">
+            <label for="Symbol">Status</label>
+                <input type="text" class="form-control" placeholder=" @if($act_templates->actmpplus_status == 1) Active @else Inactive @endif" readonly>
         </div>
 
         <div class="form-group">
