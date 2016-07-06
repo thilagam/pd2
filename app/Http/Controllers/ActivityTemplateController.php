@@ -18,6 +18,8 @@ class ActivityTemplateController extends Controller {
 
 	public $configs;
 	public $permit;
+	public $activity_temp_dictionary;
+	public $act_templates_index;
 	/*
 	|--------------------------------------------------------------------------
 	| Config
@@ -37,6 +39,7 @@ class ActivityTemplateController extends Controller {
 		$this->middleware('auth');
 		$this->permit=$request->attributes->get('permit');
     	$this->configs=$request->attributes->get('configs');
+    	$this->activity_temp_dictionary=$request->attributes->get('dictionary');
 	}
 	/**
 	 * Display a listing of the resource.
@@ -49,11 +52,16 @@ class ActivityTemplateController extends Controller {
 		if(!$this->permit->crud_activity_templates)
             return redirect('accessDenied');
 
-		$act_templates = CepActivityTemplates::leftjoin('cep_activity_templates_plus','actmp_id','=','actmpplus_template_id')
+		/*$act_templates = CepActivityTemplates::leftjoin('cep_activity_templates_plus','actmp_id','=','actmpplus_template_id')
 						      ->leftjoin('cep_activity_types','acttype_id','=','actmpplus_type')
 						      ->leftjoin('cep_languages','actmpplus_language_code','=','lang_code')
 						      ->get();
-		return view('activity_templates.index',compact('act_templates'));
+		return view('activity_templates.index',compact('act_templates'));*/
+		$this->act_templates_index = CepActivityTemplates::leftjoin('cep_activity_templates_plus','actmp_id','=','actmpplus_template_id')
+						      ->leftjoin('cep_activity_types','acttype_id','=','actmpplus_type')
+						      ->leftjoin('cep_languages','actmpplus_language_code','=','lang_code')
+						      ->get();
+		return view('activity_templates.index')->with(array('act_templates'=>$this->act_templates_index));
 	}
 
 	/**
