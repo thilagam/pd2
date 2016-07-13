@@ -25,6 +25,9 @@ class ActivityTemplateController extends Controller {
 	public $activity_temp_language;
 	public $acttemplates;
 	public $act_templates_edit;
+	public $acttemplates_i;
+	public $validate;
+	public $temp;
 	/*
 	|--------------------------------------------------------------------------
 	| Config
@@ -114,42 +117,42 @@ class ActivityTemplateController extends Controller {
 	public function store()
 	{
 		//
-		$acttemplates = Request::only('actmp_id','actmp_name','actmp_description');
+		$this->acttemplates = Request::only('actmp_id','actmp_name','actmp_description');
 
-		$acttemplates_i = Request::only('actmpplus_language_code','actmpplus_type','actmpplus_template');
-		if($acttemplates['actmp_id'] == 0){
-                        $validate = Validator::make($acttemplates,[
+		$this->acttemplates_i = Request::only('actmpplus_language_code','actmpplus_type','actmpplus_template');
+		if($this->acttemplates['actmp_id'] == 0){
+                        $this->validate = Validator::make($this->acttemplates,[
                                                 'actmp_name' => 'required',
                                                 'actmp_description' => 'required',
                         ]);
-                        $validate = Validator::make($acttemplates_i,[
+                        $this->validate = Validator::make($this->acttemplates_i,[
                                                 'actmpplus_language_code' => 'required',
                                                 'actmpplus_type' => 'required',
                                                 'actmpplus_template' => 'required',
                         ]);
-                        if($validate->fails()){
-                                return redirect()->back()->withErrors($validate->errors());
+                        if($this->validate->fails()){
+                                return redirect()->back()->withErrors($this->validate->errors());
                         }
 
 		//	print_r ($acttemplates); print_r ($acttemplates_i); exit;
 
-			$temp = CepActivityTemplates::create($acttemplates);
-			$acttemplates_i['actmpplus_template_id'] = $temp['actmp_id'];
-                        CepActivityTemplatesPlus::create($acttemplates_i);
+			$this->temp = CepActivityTemplates::create($this->acttemplates);
+			$this->acttemplates_i['actmpplus_template_id'] = $this->temp['actmp_id'];
+                        CepActivityTemplatesPlus::create($this->acttemplates_i);
 
 		}else{
 
-			$acttemplates_i['actmpplus_template_id'] = $acttemplates['actmp_id'];
-			$validate = Validator::make($acttemplates_i,[
+			$this->acttemplates_i['actmpplus_template_id'] = $this->acttemplates['actmp_id'];
+			$this->validate = Validator::make($this->acttemplates_i,[
 						'actmp_id' => 'actmpplus_template_id',
                 				'actmpplus_language_code' => 'required',
  			    			'actmpplus_type' => 'required',
 						'actmpplus_template' => 'required',
                  	]);
-		 	if($validate->fails()){
-				return redirect()->back()->withErrors($validate->errors());
+		 	if($this->validate->fails()){
+				return redirect()->back()->withErrors($this->validate->errors());
                  	}
-			CepActivityTemplatesPlus::cctmp_descriptionactmp_descriptionreate($acttemplates_i);
+			CepActivityTemplatesPlus::cctmp_descriptionactmp_descriptionreate($this->acttemplates_i);
 		}
 		return redirect('activity-templates');
 	}
@@ -234,18 +237,18 @@ class ActivityTemplateController extends Controller {
 	public function update($id)
 	{
 		//
-                $acttemplates_i = Request::only('actmpplus_language_code','actmpplus_type','actmpplus_template','actmpplus_status','actmpplus_template_id');
-		$validate = Validator::make($acttemplates_i,[
+                $this->acttemplates_i = Request::only('actmpplus_language_code','actmpplus_type','actmpplus_template','actmpplus_status','actmpplus_template_id');
+		$this->validate = Validator::make($this->acttemplates_i,[
                                                 'actmpplus_status' => 'required',
                                                 'actmpplus_language_code' => 'required',
                                                 'actmpplus_type' => 'required',
                                                 'actmpplus_template' => 'required',
 						'actmpplus_template_id' => 'required'
                         ]);
-                        if($validate->fails()){
-                                return redirect()->back()->withErrors($validate->errors());
+                        if($this->validate->fails()){
+                                return redirect()->back()->withErrors($this->validate->errors());
                         }
-		CepActivityTemplatesPlus::where('actmpplus_id',$id)->update($acttemplates_i);
+		CepActivityTemplatesPlus::where('actmpplus_id',$id)->update($this->acttemplates_i);
 		return redirect('activity-templates');
 	}
 
