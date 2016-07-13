@@ -13,6 +13,10 @@ class ActivityTypeController extends Controller {
 
 	public $configs;
 	public $permit;
+	public $activity_type;
+	public $validate;
+	public $activityTypeUpdate;
+	public $language;
 	/*
 	|--------------------------------------------------------------------------
 	| Config
@@ -43,8 +47,9 @@ class ActivityTypeController extends Controller {
 		//
 		if(!$this->permit->crud_activity_types)
             return redirect('accessDenied');
-		$activity_type = CepActivityTypes::all();
-		return view('activities.index',compact('activity_type'));
+		$this->activity_type = CepActivityTypes::all();
+		//return view('activities.index',compact('activity_type'));
+		return view('activities.index')->with(array('activity_type'=>$this->activity_type));
 	}
 
 	/**
@@ -57,7 +62,7 @@ class ActivityTypeController extends Controller {
 		//
 		if(!$this->permit->crud_activity_types_create)
             return redirect('accessDenied');
-		return view('activities.create',compact('activities'));
+        return view('activities.create');
 	}
 
 	/**
@@ -68,17 +73,17 @@ class ActivityTypeController extends Controller {
 	public function store()
 	{
 		//
-		$activity_type=Request::all();
-                $validate = Validator::make($activity_type,[
+		$this->activity_type=Request::all();
+                $this->validate = Validator::make($this->activity_type,[
                             'acttype_name' => 'required|unique:cep_activity_types',
  			    'acttype_description' => 'required',
 			    'acttype_icon' => 'required',
                  ]);
 
-                if($validate->fails()){
-			return redirect()->back()->withErrors($validate->errors());
+                if($this->validate->fails()){
+			return redirect()->back()->withErrors($this->validate->errors());
                 }
-  		CepActivityTypes::create($activity_type);
+  		CepActivityTypes::create($tis->activity_type);
 		return redirect('activity-types');
 	}
 
@@ -93,8 +98,9 @@ class ActivityTypeController extends Controller {
 		//
 		if(!$this->permit->crud_activity_types_read)
             return redirect('accessDenied');
-        $activity_type = CepActivityTypes::find($id);
-        return count($activity_type) ? view('activities.show',compact('activity_type')) : abort(404);
+        $this->activity_type = CepActivityTypes::find($id);
+        return count($this->activity_type) ? view('activities.show')->with(array('activity_type'=>$this->activity_type)) : abort(404);
+        //return count($activity_type) ? view('activities.show',compact('activity_type')) : abort(404);
 	}
 
 	/**
@@ -109,8 +115,9 @@ class ActivityTypeController extends Controller {
 		if(!$this->permit->crud_activity_types_edit)
             return redirect('accessDenied');
 
-        $activity_type = CepActivityTypes::find($id);
-        return count($activity_type) ? view('activities.edit',compact('activity_type')) : abort(404);
+        $this->activity_type = CepActivityTypes::find($id);
+        //return count($activity_type) ? view('activities.edit',compact('activity_type')) : abort(404);
+        return count($this->activity_type) ? view('activities.edit')->with(array('activity_type'=>$this->activity_type)) : abort(404);
 	}
 
 	/**
@@ -122,17 +129,17 @@ class ActivityTypeController extends Controller {
 	public function update($id)
 	{
 		//
-    	        $activityTypeUpdate=Request::only('acttype_name','acttype_description','acttype_icon','acttype_status');
-				$language = CepActivityTypes::where('acttype_id', $id)->first();
-                $validate = Validator::make($activityTypeUpdate,[
+    	        $this->activityTypeUpdate=Request::only('acttype_name','acttype_description','acttype_icon','acttype_status');
+				$this->language = CepActivityTypes::where('acttype_id', $id)->first();
+                $this->validate = Validator::make($this->activityTypeUpdate,[
                             'acttype_name' => 'required|unique:cep_activity_types,acttype_id,'.$id.',acttype_id',
                             'acttype_description' => 'required',
                             'acttype_icon' => 'required',
                  ]);
-                if($validate->fails()){
-                        return redirect()->back()->withErrors($validate->errors());
+                if($this->validate->fails()){
+                        return redirect()->back()->withErrors($this->validate->errors());
                 }
-	        $affectedRows = CepActivityTypes::where('acttype_id', '=', $id)->update($activityTypeUpdate);
+	        $affectedRows = CepActivityTypes::where('acttype_id', '=', $id)->update($this->activityTypeUpdate);
 	        return redirect('activity-types');
 	}
 
