@@ -10,7 +10,7 @@
      {!! Form::open(['url' => 'breadcrumbs']) !!}
     <div class="form-group">
         {!! Form::label('Modules', 'Modules') !!}
-        {!! Form::select('breadcrumb_module_id',$modules,null,['class'=>'form-control module-class']) !!}
+        {!! Form::select('breadcrumb_module_id',array(''=>'Select')+$modules,null,['class'=>'form-control module-class']) !!}
     </div>
     <div class="form-group">
         {!! Form::label('Name', 'Name:') !!}

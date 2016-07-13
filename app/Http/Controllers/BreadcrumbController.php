@@ -14,6 +14,11 @@ class BreadcrumbController extends Controller {
 
 	public $configs;
 	public $permit;
+	public $breadcrumbs;
+	public $modules_array;
+	public $modules;
+	public $validate;
+	public $breadcrumbUpdate;
 	/*
 	|--------------------------------------------------------------------------
 	| Breadcrumb
@@ -45,8 +50,9 @@ class BreadcrumbController extends Controller {
 		//
 		if(!$this->permit->crud_breadcrumbs)
             return redirect('accessDenied');
-		$breadcrumbs = CepBreadcrumbs::with('modules')->get();
-		return view('breadcrumbs.index',compact('breadcrumbs'));
+		$this->breadcrumbs = CepBreadcrumbs::with('modules')->get();
+		//return view('breadcrumbs.index',compact('breadcrumbs'));
+		return view('breadcrumbs.index')->with(array('breadcrumbs'=>$this->breadcrumbs));
 	}
 
 	/**
@@ -59,12 +65,14 @@ class BreadcrumbController extends Controller {
 		//
 		if(!$this->permit->crud_breadcrumbs_create)
             return redirect('accessDenied');
-		$modules_array = CepModules::where('mod_status',1)->get();
+		/*$modules_array = CepModules::where('mod_status',1)->get();
 		$modules = array();
 		$modules[""] = "Select";
 		foreach($modules_array as $mod)
 			$modules[$mod->mod_id] = $mod->mod_name;
-		return view('breadcrumbs.create',compact('modules'));
+		return view('breadcrumbs.create',compact('modules'));*/
+		$this->modules_array = CepModules::where('mod_status',1)->lists('mod_name','mod_id');
+		return view('breadcrumbs.create')->with(array('modules'=>$this->modules_array));
 	}
 
 	/**
@@ -75,20 +83,20 @@ class BreadcrumbController extends Controller {
 	public function store()
 	{
 		//
-		$breadcrumbs = Request::all();
-		$breadcrumbs['breadcrumb_url'] = preg_replace('/\d+/','DD',$breadcrumbs['breadcrumb_url']);
-                $validate = Validator::make($breadcrumbs,[
+		$this->breadcrumbs = Request::all();
+		$this->breadcrumbs['breadcrumb_url'] = preg_replace('/\d+/','DD',$this->breadcrumbs['breadcrumb_url']);
+                $this->validate = Validator::make($this->breadcrumbs,[
                             'breadcrumb_module_id' => 'required',
 			    			'breadcrumb_page_title' => 'required',
 			    			'breadcrumb_name' => 'required',
 			    			'breadcrumb_description' => 'required',
                             'breadcrumb_url' => 'required|unique:cep_breadcrumbs',
                  ]);
-		 if($validate->fails()){
-			return redirect()->back()->withErrors($validate->errors());
+		 if($this->validate->fails()){
+			return redirect()->back()->withErrors($this->validate->errors());
                  }
 		//exit;
-		CepBreadcrumbs::create($breadcrumbs);
+		CepBreadcrumbs::create($this->breadcrumbs);
 
 		/* Start Create Keywords */
 		//CepKeywords::create(array('kw_name'=>$breadcrumbs['breadcrumb_page_title'],'kw_module_id'=>$breadcrumbs['breadcrumb_module_id']));
@@ -110,9 +118,10 @@ class BreadcrumbController extends Controller {
 		//
 		if(!$this->permit->crud_breadcrumbs_read)
             return redirect('accessDenied');
-			$breadcrumb = CepBreadcrumbs::where('breadcrumb_id',$id)->first();
-      $modules = CepModules::where('mod_status',1)->get();
-      return count($breadcrumb) ? view('breadcrumbs.show',compact('breadcrumb','modules')) : abort(404);
+			$this->breadcrumb = CepBreadcrumbs::where('breadcrumb_id',$id)->first();
+      $this->modules = CepModules::where('mod_status',1)->get();
+      //return count($breadcrumb) ? view('breadcrumbs.show',compact('breadcrumb','modules')) : abort(404);
+      return count($this->breadcrumb) ? view('breadcrumbs.show')->with(array('breadcrumb'=>$this->breadcrumb,'modules'=>$this->modules)) : abort(404);
 	}
 
 	/**
@@ -126,13 +135,15 @@ class BreadcrumbController extends Controller {
 		//
 		if(!$this->permit->crud_breadcrumbs_edit)
             return redirect('accessDenied');
-        $breadcrumb = CepBreadcrumbs::where('breadcrumb_id',$id)->first();
-        $modules_array = CepModules::where('mod_status',1)->get();
+        $this->breadcrumb = CepBreadcrumbs::where('breadcrumb_id',$id)->first();
+        /*$modules_array = CepModules::where('mod_status',1)->get();
         $modules_l[""] = "Select";
         foreach($modules_array as $mod)
             $modules_l[$mod->mod_id] = $mod->mod_name;
         //		print_r ($modules_l);
-        return count($breadcrumb) ? view('breadcrumbs.edit',compact('breadcrumb','modules_l')) : abort(404);
+        return count($breadcrumb) ? view('breadcrumbs.edit',compact('breadcrumb','modules_l')) : abort(404);*/
+        $this->modules_array = CepModules::where('mod_status',1)->lists('mod_name','mod_id');
+        return count($this->breadcrumb) ? view('breadcrumbs.edit')->with(array('breadcrumb'=>$this->breadcrumb,'modules_l'=>$this->modules_array)) : abort(404);
 
 	}
 
@@ -145,19 +156,19 @@ class BreadcrumbController extends Controller {
 	public function update($id)
 	{
 		//
-                $breadcrumbUpdate=Request::only('breadcrumb_module_id','breadcrumb_name','breadcrumb_name','breadcrumb_description','breadcrumb_page_title','breadcrumb_url');
-		$breadcrumb = CepBreadcrumbs::where('breadcrumb_id', $id)->first();
-                $validate = Validator::make($breadcrumbUpdate,[
+                $this->breadcrumbUpdate=Request::only('breadcrumb_module_id','breadcrumb_name','breadcrumb_name','breadcrumb_description','breadcrumb_page_title','breadcrumb_url');
+		$this->breadcrumb = CepBreadcrumbs::where('breadcrumb_id', $id)->first();
+                $this->validate = Validator::make($this->breadcrumbUpdate,[
                             'breadcrumb_module_id' => 'required',
 			    'breadcrumb_name' => 'required',
 			    'breadcrumb_description' => 'required',
 			    'breadcrumb_page_title' => 'required',
                             'breadcrumb_url' => 'required|unique:cep_breadcrumbs,breadcrumb_url,'.$id.',breadcrumb_id',
                  ]);
-                if($validate->fails()){
+                if($this->validate->fails()){
                         return redirect()->back()->withErrors($validate->errors());
                 }
-	        $affectedRows = CepBreadcrumbs::where('breadcrumb_id', '=', $id)->update($breadcrumbUpdate);
+	        $affectedRows = CepBreadcrumbs::where('breadcrumb_id', '=', $id)->update($this->breadcrumbUpdate);
 	        return redirect('breadcrumbs');
 	}
 
